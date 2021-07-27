@@ -2,17 +2,14 @@ import React from "react";
 import api from "../utils/api";
 import Card from "./Card";
 function Main ({onEditProfile,onAddPlace,onEditAvatar,onCardClick}) {
-    const [userName, setUserName] = React.useState({})
-    const [userDescription, setUserDescription] = React.useState({})
-    const [userAvatar, setUseAvatar] = React.useState({})
+    const [currentUser, setCurrentUser] = React.useState({})
+
     const [cards, setCards] = React.useState([])
 
     React.useEffect (() => {
         api.getUserInfo ()
         .then ((res) => {
-            setUserName(res)
-            setUserDescription(res)
-            setUseAvatar(res)
+            setCurrentUser(res)
         })
         .catch((err) => {
             console.log(err)
@@ -33,13 +30,13 @@ function Main ({onEditProfile,onAddPlace,onEditAvatar,onCardClick}) {
         <main>
     <section className="profile">
         <div className="profile__avatar-container">
-            <img className="profile__avatar" src={userAvatar.avatar} alt="Аватар пользователя" />
+            <img className="profile__avatar" src={currentUser.avatar} alt="Аватар пользователя" />
             <button type="button" className="profile__avatar-edit-button" onClick={onEditAvatar}></button>  
         </div>
         <div className="profile__info">
-            <h1 className="profile__info-title">{userName.name}</h1>
+            <h1 className="profile__info-title">{currentUser.name}</h1>
             <button type="button" className="profile__edit-button transition-btn" onClick={onEditProfile}></button>
-            <h2 className="profile__info-subtitle">{userDescription.about}</h2>
+            <h2 className="profile__info-subtitle">{currentUser.about}</h2>
         </div>
         <button type="button" className="profile__add-button transition-btn" onClick={onAddPlace}></button>
     </section>
@@ -48,6 +45,7 @@ function Main ({onEditProfile,onAddPlace,onEditAvatar,onCardClick}) {
             {
                 cards.map((card) => 
                 <Card 
+                key={card._id}
                 card={card}
                 onCardClick={onCardClick}
                 />

@@ -1,13 +1,12 @@
 import React from 'react';
-import '../index.css';
 import Header from './Header';
 import Main from './Main'
 import Footer from './Footer'
-import ProfileChange from './ProfileChange';
-import NewCard from './NewCard';
+import EditProfilePopup from './EditProfilePopup';
+import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
-import AvatarChange from './AvatarChange';
-import CardDelet from './CardDelet';
+import EditAvatarPopup from './EditAvatarPopup';
+import CardDeletePopup from './CardDeletePopup';
 
 function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
@@ -35,34 +34,34 @@ function App() {
     }   
 
   return ( 
-    <body className="page">
+    <div className="page">
         <Header />
         <Main
-        onEditProfile = {handleEditProfileClick} 
-        onAddPlace = {handleAddPlaceClick} 
-        onEditAvatar = {handleEditAvatarClick}
-        onCardClick = {handleCardClick} 
+            onEditProfile = {handleEditProfileClick} 
+            onAddPlace = {handleAddPlaceClick} 
+            onEditAvatar = {handleEditAvatarClick}
+            onCardClick = {handleCardClick} 
         />
         <Footer />
-        <ProfileChange 
-        isOpen = {isEditProfilePopupOpen}
-        onClose = {closeAllPopups}
+        <EditProfilePopup 
+            isOpen = {isEditProfilePopupOpen}
+            onClose = {closeAllPopups}
         />
-        <NewCard 
-        isOpen = {isAddPlacePopupOpen}
-        onClose = {closeAllPopups}
+        <AddPlacePopup 
+            isOpen = {isAddPlacePopupOpen}
+            onClose = {closeAllPopups}
         />
         <ImagePopup />
-        <AvatarChange 
-        isOpen = {isEditAvatarPopupOpen}
-        onClose = {closeAllPopups}
+        <EditAvatarPopup 
+            isOpen = {isEditAvatarPopupOpen}
+            onClose = {closeAllPopups}
         />
-        <CardDelet />
+        <CardDeletePopup />
         <ImagePopup
-        card = {selectedCard}
-        onClose = {closeAllPopups}
+            card = {selectedCard}
+            onClose = {closeAllPopups}
         />
-    </body>
+    </div>
   )
 }
 

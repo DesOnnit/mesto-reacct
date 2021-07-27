@@ -3,7 +3,7 @@ class Api {
         this.baseUrl = baseUrl;
         this.headers = headers;
     }
-    _getFeath (url, method, body) {
+    _makeRequest (url, method, body) {
         const feathOptons = {
             method: method,
             headers: this.headers
@@ -20,28 +20,28 @@ class Api {
             })
     }
     getUserInfo () {
-        return this._getFeath ('users/me','GET')
+        return this._makeRequest ('users/me','GET')
     }
     getInitialCards () {
-        return this._getFeath ('cards','GET')
+        return this._makeRequest ('cards','GET')
     }
     saveUserInfo (item) {
-        return this._getFeath ('users/me','PATCH',item)
+        return this._makeRequest ('users/me','PATCH',item)
     }
     getNewCard (item) {
-        return this._getFeath ('cards','POST',item)
+        return this._makeRequest ('cards','POST',item)
     }
     deleteCard (cardId) {
-        return this._getFeath (`cards/${cardId}`,'DELETE')
+        return this._makeRequest (`cards/${cardId}`,'DELETE')
     }
     handleLikeCard (cardId) {
-        return this._getFeath (`cards/likes/${cardId}`,'PUT')
+        return this._makeRequest (`cards/likes/${cardId}`,'PUT')
     }
     handleUnlike (cardId) {
-        return this._getFeath (`cards/likes/${cardId}`,'DELETE')
+        return this._makeRequest (`cards/likes/${cardId}`,'DELETE')
     }
     handleAvatarChange (item) {
-        return this._getFeath (`users/me/avatar`,'PATCH', item)
+        return this._makeRequest (`users/me/avatar`,'PATCH', item)
     }
     getInitialData() {
         return Promise.all([this.getUserInfo(), this.getInitialCards ()]);

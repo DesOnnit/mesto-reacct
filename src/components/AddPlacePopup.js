@@ -1,14 +1,15 @@
 import PopupWithForm from "./PopupWithForm";
-function NewCard (props) {
+function AddPlacePopup (props) {
     return (
         <PopupWithForm 
         name = "card"
         title = "Новое место"
+        button = "Сохранить"
         isOpen = {props.isOpen}
         onClose = {props.onClose}
         >
             <label className="popup__label">
-                <input type="text" className="popup__input" id="title" name="name" placeholder="Название" minlength="2" maxlength="30" required />
+                <input type="text" className="popup__input" id="title" name="name" placeholder="Название" minLength="2" maxLength="30" required />
                 <span className="popup__error" id="title-error"></span>
             </label>
             <label className="popup__label">
@@ -19,4 +20,4 @@ function NewCard (props) {
     )
 }
 
-export default NewCard
+export default AddPlacePopup
