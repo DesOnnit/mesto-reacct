@@ -16,7 +16,7 @@ function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState(null);
-    const [cards, setCards] = React.useState([])
+    const [cards, setCards] = React.useState([]);
 
     function handleCardLike(card) {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -49,6 +49,7 @@ function App() {
         })
         setEditProfilePopupOpen(false)
     }
+
     function handleUpdateAvatar (item) {
         api.handleAvatarChange (item)
         .then(res=>{
@@ -59,6 +60,7 @@ function App() {
         })
         setEditAvatarPopupOpen(false)
     }
+
     function handleAddPlaceSubmit (item) {
         api.getNewCard (item)
         .then (newCard=>{
@@ -93,18 +95,22 @@ function App() {
     function handleEditProfileClick () {
         setEditProfilePopupOpen(true)
     } 
+
     function handleEditAvatarClick () {
         setEditAvatarPopupOpen(true)
     }
+
     function handleAddPlaceClick () {
         setAddPlacePopupOpen(true)
     }
+
     function closeAllPopups () {
         setEditProfilePopupOpen(false)
         setEditAvatarPopupOpen(false)
         setAddPlacePopupOpen(false)
         setSelectedCard(null)
     }
+    
     function handleCardClick (card) {
         setSelectedCard (card)
     }   
@@ -143,6 +149,7 @@ function App() {
             <ImagePopup
                 card = {selectedCard}
                 onClose = {closeAllPopups}
+                cards = {cards}
             />
         </div> 
     </CurrentUserContext.Provider>

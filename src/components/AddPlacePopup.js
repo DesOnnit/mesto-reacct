@@ -1,8 +1,9 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 function AddPlacePopup (props) {
-    const nameRef = React.useRef('')
-    const linkRef = React.useRef('')
+    const nameRef = React.useRef('');
+    const linkRef = React.useRef('');
+
     function handleSubmit(e) {
         e.preventDefault();
         props.onUpdatePlace({
@@ -15,12 +16,12 @@ function AddPlacePopup (props) {
 
     return (
         <PopupWithForm 
-        name = "card"
-        title = "Новое место"
-        button = "Сохранить"
-        isOpen = {props.isOpen}
-        onClose = {props.onClose}
-        onSubmit = {handleSubmit}
+            name = "card"
+            title = "Новое место"
+            button = "Сохранить"
+            isOpen = {props.isOpen}
+            onClose = {props.onClose}
+            onSubmit = {handleSubmit}
         >
             <label className="popup__label">
                 <input type="text" ref={nameRef} className="popup__input" id="title" name="name" placeholder="Название" minLength="2" maxLength="30" required />
