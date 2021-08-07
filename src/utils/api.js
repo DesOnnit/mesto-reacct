@@ -34,11 +34,8 @@ class Api {
     deleteCard (cardId) {
         return this._makeRequest (`cards/${cardId}`,'DELETE')
     }
-    handleLikeCard (cardId) {
-        return this._makeRequest (`cards/likes/${cardId}`,'PUT')
-    }
-    handleUnlike (cardId) {
-        return this._makeRequest (`cards/likes/${cardId}`,'DELETE')
+    changeLikeCardStatus (cardId, isLiked) {
+        return this._makeRequest (`cards/likes/${cardId}`,`${isLiked ? 'PUT' : 'DELETE'}`)
     }
     handleAvatarChange (item) {
         return this._makeRequest (`users/me/avatar`,'PATCH', item)
