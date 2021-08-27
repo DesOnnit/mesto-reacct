@@ -1,11 +1,12 @@
-import React from "react";
-function Login() {
+import { Link } from "react-router-dom";
+
+function Register() {
 
     return (
         <div className="sign-window">
             <form className="sign-window__form">
                 <h2 className="sign-window__title">
-                    Вход
+                    Регистрация
                 </h2>
                 <label className="popup__label">
                     <input
@@ -38,12 +39,20 @@ function Login() {
                     </span>
                 </label>
                 <button className="sign-window__button transition">
-                    Войти
+                    Зарегистрироваться
                 </button>
             </form>
+            <div className="sign-window__segue">
+                <h3 className="sign-window__link">
+                    Уже зарегистрированы?
+                </h3>
+                <Link to="/sign-in"
+                    className="sign-window__link transition-btn">
+                    Войти
+                </Link>
+            </div>
         </div>
     )
 }
 
-
-export default Login
+export default Register

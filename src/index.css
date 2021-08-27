@@ -52,3 +52,5 @@
 @import url(./blocks/sign-window/__input/sign-window__input.css);
 @import url(./blocks/sign-window/__button/sign-window__button.css);
 @import url(./blocks/sign-window/__form/sign-window__form.css);
+@import url(./blocks/sign-window/__link/sign-window__link.css);
+@import url(./blocks/sign-window/__segue/sign-window__segue.css);

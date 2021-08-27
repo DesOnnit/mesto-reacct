@@ -11,6 +11,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import api from "../utils/api";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./Login"
+import Register from "./Register";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
@@ -152,6 +153,9 @@ function App() {
         </Route>
         <Route path="/sign-in">
           <Login/>
+        </Route>
+        <Route path="/sign-up">
+          <Register/>
         </Route>
         </Switch>
         <Footer />
