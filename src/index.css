@@ -54,3 +54,10 @@
 @import url(./blocks/sign-window/__form/sign-window__form.css);
 @import url(./blocks/sign-window/__link/sign-window__link.css);
 @import url(./blocks/sign-window/__segue/sign-window__segue.css);
+@import url(./blocks/popup/__info/popup__info.css);
+@import url(./blocks/popup/__info/_title/popup__info_title.css);
+@import url(./blocks/popup/__info/_img/popup__info_img.css);
+@import url(./blocks/header/__email/header__email.css);
+@import url(./blocks/header/__info/header__info.css);
+@import url(./blocks/header/__link/header__link.css);
+@import url(./blocks/header/__link/_active/header__link_active.css);

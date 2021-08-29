@@ -9,11 +9,18 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import CardDeletePopup from "./CardDeletePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import api from "../utils/api";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import Login from "./Login"
 import Register from "./Register";
+import { AuthContext } from "../contexts/AuthContext";
+import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
+import success from "../images/success.png";
+import unSuccess from '../images/unsuccess.png';
+import * as Auth from "./Auth"
 
 function App() {
+  const history = useHistory()
   const [currentUser, setCurrentUser] = React.useState({});
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
     React.useState(false);
@@ -21,6 +28,10 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [cards, setCards] = React.useState([]);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [message, setMessage] = React.useState({ imgInfo: '', text: '' })
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -128,57 +139,119 @@ function App() {
     setEditAvatarPopupOpen(false);
     setAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setIsInfoTooltipOpen(false)
   }
 
   function handleCardClick(card) {
     setSelectedCard(card);
   }
 
+  function handleRegister(password, email) {
+    Auth.register(password, email)
+      .then((res) => {
+        setEmail(res.data.email)
+        setMessage({ imgInfo: success, text: 'Вы успешно зарегистрировались!' })
+      })
+      .then(()=>{
+        history.push('/sign-in')
+      })
+      .catch(() => setMessage({ imgInfo: unSuccess, text: 'Что-то пошло не так! Попробуйте ещё раз.' }))
+      .finally(() => setIsInfoTooltipOpen(true))
+  }
+
+  function handleLogin(password, email) {
+    Auth.authorize(password, email)
+      .then((token) => {
+        Auth.getContent(token)
+          .then((res) => {
+            setLoggedIn(true)
+            setEmail(res.data.email)
+            history.push('/')
+          })
+      })
+      .catch((err) => console.log(err.status))
+  }
+
+  React.useEffect(() => {
+    tokenCheck()
+  }, [])
+
+  function tokenCheck() {
+    const jwt = localStorage.getItem('jwt')
+    if (jwt) {
+      Auth.getContent(jwt)
+        .then((res) => {
+          setLoggedIn(true)
+          setEmail(res.data.email)
+          history.push('/')
+        })
+        .catch((err) => console.log(err))
+    }
+    history.push('/sign-up')
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem('jwt')
+    setLoggedIn(false)
+  }
+
   return (
-    <BrowserRouter>
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header />
-        <Switch>
-        <Route exact path="/">
-          <Main
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
+    <AuthContext.Provider value={setLoggedIn}>
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <Header
+            loggedIn={loggedIn}
+            email={email}
+            onSignOut={handleSignOut} />
+          <Switch>
+            <ProtectedRoute
+              exact path="/"
+              component={Main}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+            />
+            <Route path="/sign-in">
+              <Login
+                onLogin={handleLogin}
+              />
+            </Route>
+            <Route path="/sign-up">
+              <Register
+                onRegister={handleRegister} />
+            </Route>
+          </Switch>
+          <Footer />
+          <InfoTooltip
+            isOpen={isInfoTooltipOpen}
+            imgInfo={message.imgInfo}
+            title={message.text}
+            onClose={closeAllPopups}
           />
-        </Route>
-        <Route path="/sign-in">
-          <Login/>
-        </Route>
-        <Route path="/sign-up">
-          <Register/>
-        </Route>
-        </Switch>
-        <Footer />
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onUpdatePlace={handleAddPlaceSubmit}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <CardDeletePopup />
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-      </div>
-    </CurrentUserContext.Provider>
-    </BrowserRouter>
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onUpdatePlace={handleAddPlaceSubmit}
+          />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+          <CardDeletePopup />
+          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        </div>
+      </CurrentUserContext.Provider>
+    </AuthContext.Provider>
   );
 }
 
